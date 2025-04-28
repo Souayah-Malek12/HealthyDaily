@@ -22,5 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', require('./Routes/authRoutes'));
 app.use('/user', require('./Routes/userRoutes'));
+app.use('/cals', require('./Routes/caloriesRoutes'));
+
 
 

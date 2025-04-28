@@ -60,6 +60,10 @@ const userSchema = mongoose.Schema({
       },
       dailyCal : {
         type : Number,
+      },
+      remainingCalories : {
+        type: Number,
+        default:0
       }
           
       
