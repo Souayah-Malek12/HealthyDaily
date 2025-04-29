@@ -60,10 +60,14 @@ const userSchema = mongoose.Schema({
       },
       dailyCal : {
         type : Number,
+        default: 0
       },
       remainingCalories : {
         type: Number,
         default:0
+      },
+      currentStatus :{
+        type: String
       }
           
       
