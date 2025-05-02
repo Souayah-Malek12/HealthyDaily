@@ -40,10 +40,15 @@ const updateRemainingCals = async (req, res) => {
                 });
         }
         const consumedCalors = (user.dailyCal * coefbalance)
-        let newRemainingCalories = user.remainingCalories-(consumedCalors);
+        let newRemainingCalories = user.remainingCalories-consumedCalors;
+        console.log(consumedCalors)
         if(newRemainingCalories<0){
             newRemainingCalories=0
         }
+        console.log("consumedCalors",consumedCalors);
+
+        console.log("remaining",newRemainingCalories);
+        
         const updatedUser = await userModel.findByIdAndUpdate(
             req.user,
             { remainingCalories: newRemainingCalories },

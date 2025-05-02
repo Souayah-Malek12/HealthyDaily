@@ -67,12 +67,11 @@ const userSchema = mongoose.Schema({
         default:0
       },
       currentStatus :{
-        type: String
+        type: String,
       }
           
       
 }, { timestamps: true });
 
-userSchema.index({ location: "2dsphere" });
-
-module.exports = mongoose.model("user",userSchema);
+const userModel = mongoose.models.user || mongoose.model("user", userSchema);
+module.exports = userModel; // only defines it once

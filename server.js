@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3100;
 require('dotenv').config();
 const cors = require("cors")
-
+require('./utils/Cron');
 
 app.use(cors())
 app.use(express.json());

@@ -1,5 +1,5 @@
 const express = require("express");
-const { updateRemainingCals, getDailyCalories, getFoodSuggestionController, suggestMealController } = require("../Controllers/caloriesController");
+const { updateRemainingCals, getDailyCalories,  suggestMealController } = require("../Controllers/caloriesController");
 const { requireSignIn } = require("../Middleware/authMiddleware");
 const router = express.Router();
 
