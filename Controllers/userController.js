@@ -1,5 +1,5 @@
 const userModel = require("../models/User");
-
+///awel ma yod5el lel app ou bien update
 const calcDailyCalorController = async (req, res) => {
     try {
       const userId = req.user;
@@ -118,7 +118,7 @@ const calcDailyCalorController = async (req, res) => {
     }
   };
 
-
+//y3mel update lel profile(goal, weight...)
   const updateCalcDailyCalorController = async (req, res) => {
     try {
       const user = await userModel.findById(req.user);
@@ -193,7 +193,7 @@ const calcDailyCalorController = async (req, res) => {
   
       if (goal === "Maintain") {
         // do nothing
-      } else if (goal === "Lose") {
+      } else if (goal === "Lose Weight") {
         dailyCalories -= 500;
       } else if (goal === "Gain") {
         dailyCalories += 500;
@@ -238,7 +238,7 @@ const calcDailyCalorController = async (req, res) => {
     }
   };
   
-
+// ya3mle update lel bmi wa7dou
   const updatebodyBmiController = async(req, res)=>{
     try{
       const user = await userModel.findById(req.user);
@@ -264,7 +264,7 @@ const calcDailyCalorController = async (req, res) => {
       } else {
         bodyStatus = `Obesity with value of :${bmiVal}`;
       }
-
+        console.log("bmiVal",bmiVal)
         user.height = height;
         user.weight = weight;
        user.currentStatus= bodyStatus;
@@ -281,5 +281,30 @@ const calcDailyCalorController = async (req, res) => {
       });
     }
   }
+  /// if height or weight changed in controller a we should call controllerB wel 3aks zeda
+  const userDetailsController = async (req, res) => {
+    try {
+      const user = await userModel.findById(req.user); // exclude password
+      if (!user) {
+        return res.status(404).send({
+          success: false,
+          message: "User not found",
+        });
+      }
   
-module.exports = { calcDailyCalorController, updatebodyBmiController, updateCalcDailyCalorController };
+      return res.status(200).send({
+        success: true,
+        message: "User details successfully",
+        user,
+      });
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+      return res.status(500).send({
+        success: false,
+        message: `Error fetching user details: ${error.message}`,
+      });
+    }
+  };
+  
+
+module.exports = { calcDailyCalorController, updatebodyBmiController, updateCalcDailyCalorController, userDetailsController };

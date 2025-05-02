@@ -1,4 +1,5 @@
 const userModel = require("../models/User");
+const foods = require('../utils/meals.json');
 
 const updateRemainingCals = async (req, res) => {
     try {
@@ -38,8 +39,8 @@ const updateRemainingCals = async (req, res) => {
                     message: "Invalid meal provided",
                 });
         }
-
-        let newRemainingCalories = user.remainingCalories-((user.dailyCal * coefbalance));
+        const consumedCalors = (user.dailyCal * coefbalance)
+        let newRemainingCalories = user.remainingCalories-(consumedCalors);
         if(newRemainingCalories<0){
             newRemainingCalories=0
         }
@@ -54,6 +55,7 @@ const updateRemainingCals = async (req, res) => {
         return res.status(200).send({
             success: true,
             message: "Remaining calories updated successfully",
+            consumedCalors: consumedCalors,
             remainingCalories,
         });
 
@@ -65,4 +67,73 @@ const updateRemainingCals = async (req, res) => {
         });
     }
 };
-module.exports = { updateRemainingCals };
+
+const getDailyCalories = async () => {
+    try {
+      const user = await userModel.findById(req.user).select("dailyCal");
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return user.dailyCal;
+    } catch (error) {
+      console.error("Error getting daily calories:", error);
+      throw error;
+    }
+  };
+  
+
+
+  const suggestMealController = (req, res) => {
+    try {
+      const { mealType } = req.params; // 'snacks', 'main_meals', etc.
+      const { consumedCalories } = req.body;
+  
+      if (!foods.meals || !foods.meals[mealType]) {
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid or missing meal type',
+        });
+      }
+  
+      const mealFoods = foods.meals[mealType];
+      let selectedFoods = [];
+      let totalCalories = 0;
+      const usedIndexes = new Set();
+  
+      while (totalCalories < consumedCalories && usedIndexes.size < mealFoods.length) {
+        const randomIndex = Math.floor(Math.random() * mealFoods.length);
+        if (usedIndexes.has(randomIndex)) continue;
+  
+        usedIndexes.add(randomIndex);
+        const randomFood = mealFoods[randomIndex];
+  
+        selectedFoods.push(randomFood);
+        totalCalories += randomFood.calories_per_100g;
+      }
+  
+      return res.status(200).json({
+        success: true,
+        mealType,
+        targetCalories: consumedCalories,
+        totalCalories,
+        foods: selectedFoods,
+      });
+    } catch (error) {
+      console.error('Error in suggestMealController:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+        error: error.message,
+      });
+    }
+  };
+  
+  
+
+
+
+
+
+
+
+module.exports = { updateRemainingCals, getDailyCalories ,  suggestMealController};
