@@ -1,6 +1,5 @@
 const express = require('express');
 const {connectDb} = require("./Config/dbConfig");
-const { registreController, loginController } = require('./Controllers/authController');
 const app = express();
 const PORT = 3100;
 require('dotenv').config();
@@ -17,12 +16,13 @@ app.listen(PORT, () => {
   });
   
 app.get('/', (req, res) => {
-  res.send('Hello hackathon!');
+  res.send('Hello pfa!');
 });
 
 app.use('/auth', require('./Routes/authRoutes'));
 app.use('/user', require('./Routes/userRoutes'));
 app.use('/cals', require('./Routes/caloriesRoutes'));
+app.use('/adm', require('./Routes/adminRoutes'));
 
 
 

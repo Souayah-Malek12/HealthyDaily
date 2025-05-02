@@ -6,7 +6,7 @@ const registreController = async (req, res) => {
     try {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        const { username,  email, password, role, age, sex, height, weight , dailyActivity, goal,coordinates } = req.body;
+        const { username,  email, password, age, sex, height, weight , dailyActivity, goal,coordinates } = req.body;
 
 
         if (!username) {
@@ -16,10 +16,8 @@ const registreController = async (req, res) => {
         if (!email) {
             return res.status(400).send({ success: false, message: "Email is required" });
         }
-        if (!role) {
-            return res.status(400).send({ success: false, message: "Role is required" });
-        }
-        if(role =="Consommateur"){
+        
+       
         if (!sex) {
             return res.status(400).send({ success: false, message: "Sex is required" });
         }
@@ -47,7 +45,7 @@ const registreController = async (req, res) => {
         if (!age) {
             return res.status(400).send({ success: false, message: "Age is required" });
         }
-    }
+    
         if (!coordinates || coordinates.length < 2) {
             return res.status(400).send({ success: false, message: "Location (latitude and longitude) is required" });
         }
@@ -77,7 +75,7 @@ const registreController = async (req, res) => {
             email,
             password: hashedPassword,
            coordinates,
-            role,
+            
             age,
             sex,
             height,
@@ -104,7 +102,7 @@ const registreController = async (req, res) => {
 
     const loginController = async(req, res)=>{
         try{
-            const {email, password, role} = req.body;
+            const {email, password} = req.body;
             
            
             const userExist = await userModel.findOne({ email}) 
@@ -116,14 +114,7 @@ const registreController = async (req, res) => {
                 message: "Check your email/password",
             })
         }
-        if(role.toLowerCase() !== userExist.role.toLowerCase()){
-            return res.status(401).send({   
-                success : false,
-                message: "Check  role",
-                
-            })
-        }
-        
+       
         const isMatch = await bcrypt.compare(password,  userExist.password)
 
         if(!isMatch){

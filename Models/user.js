@@ -10,6 +10,10 @@ const userSchema = mongoose.Schema({
       required: true,
       unique: true,
     },
+    role : {
+      type: String,
+      default: "user"
+    },
     age : {
       type: Number,
       required: function() { return this.role === 'Consommateur'; }
@@ -42,17 +46,13 @@ const userSchema = mongoose.Schema({
         'Moderate Manual Work',
         'Athlete',
       ],
-      required: function() { return this.role === 'Consommateur'; }
+      
     },
     goal: {
       type: String,
       enum: ['Maintain', 'Lose Weight', 'Gain Weight'],
-      required: function() { return this.role === 'Consommateur'; }
+      
     },
-    role: {
-        type: String,
-        enum: ["Consommateur", "Producteur", "Agriculteur",],
-      },
       coordinates: {
         type: [Number],
         required: true,
